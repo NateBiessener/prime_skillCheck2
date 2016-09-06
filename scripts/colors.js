@@ -30,10 +30,7 @@ $(document).ready(function () {
   //add function to each color square that will change the square's color and update the color counters
   $('body').on('click', '.colorDiv', function(){
     //define newColor as the next color in the colors array
-    var newColor = Number($(this).attr('color')) + 1;
-    if (newColor >= colors.length) {
-      newColor = 0;
-    }
+    var newColor = Math.floor(Math.random() * 4);
     //update counts
     colors[$(this).attr('color')].count--;
     colors[newColor].count++;
