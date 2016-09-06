@@ -27,10 +27,18 @@ $(document).ready(function () {
     updateCounts();
     addColorDiv(color);
   })// end .colorBtn onclick
-  //add function to each color square that will remove the square and update that color's counter
+  //add function to each color square that will change the square's color and update the color counters
   $('body').on('click', '.colorDiv', function(){
-    $(this).remove();
+    //define newColor as the next color in the colors array
+    var newColor = Number($(this).attr('color')) + 1;
+    if (newColor >= colors.length) {
+      newColor = 0;
+    }
+    //update counts
     colors[$(this).attr('color')].count--;
+    colors[newColor].count++;
+    $(this).attr('color', newColor);
+    $(this).attr('style', 'background-color:' + colors[newColor].color);
     updateCounts();
   })//end .colorDiv onclick
 });//end doc ready
@@ -38,10 +46,14 @@ $(document).ready(function () {
 //playing a little with selectors and String.slice here
 //changes each #countDiv <p> html string to that string with it's last index updated to the proper color count
 var updateCounts = function(){
-  for (var i = 0; i < $('#countDiv p').length; i++) {
+  $('#countDiv').empty();
+  for (var i = 0; i < colors.length; i++) {
+    /****************Doesn't work with numbers > 9**********
     $('#countDiv p[color="'+ i + '"]').html(
       $('#countDiv p[color="'+ i + '"]').html().slice(0, $('#countDiv p[color="'+ i + '"]').html().length - 1) + colors[i].count
     );
+    *******************************************************/
+    $('#countDiv').append('<p color="'+ i +'">Total ' + colors[i].color + ': '+ colors[i].count +'</p>');
   }
 }
 
@@ -51,7 +63,7 @@ var addColorDiv = function(color){
   //keep color attribute so counts can be updated properly
   newDiv.attr('color', color)
   //style the color divs in jQuery because I can
-  newDiv.attr('style', 'width: 100px; height: 100px; display: inline-block; border: 1px solid black; background-color:' + colors[color].color + ';');
+  newDiv.attr('style', 'background-color:' + colors[color].color + ';');
   //append the new div to #outDiv
   $('#outDiv').append(newDiv);
 };
